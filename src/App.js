@@ -43,82 +43,21 @@ class App extends Component {
       })
     .then(response => response.json())
     .then(data => {
-      const OGdatabyTrack = data.databyTrack
-      const OGdataByAttribute = data.dataByAttribute
-      const rawDataByTrack = data.rawDataByTrack
-      const spotifyAudioFeatures = data.spotifyAudioFeatures
 
       this.setState({
+        rawIncomingData: data,
         radarChartData: data.databyTrack,
         lineChartData: data.dataByAttribute,
         rawDataByTrack: data.rawDataByTrack,
         spotifyAudioFeatures: data.spotifyAudioFeatures
       });
-
-      //listify all the data
-      var incomingData = {
-        OGdataByTrack: data.databyTrack,
-        OGdataByAttribute: data.dataByAttribute,
-        trackNames: []
-      }
-      {Object.keys(data).map(key => (
-        incomingData[key] = data[key]
-        )
-      )}
-      //assign blank arrays to store data by attribute
-      {incomingData.spotifyAudioFeatures.map((audioFeature) => {
-        incomingData[audioFeature] = []
-       })}
-
-       // push each data point on to the corresponding array
-       {incomingData.rawDataByTrack.map((track) => {
-         incomingData['trackNames'].push(track.trackName)
-        //loop thru audio features
-        {incomingData.spotifyAudioFeatures.map((audioFeature) => {
-          incomingData[audioFeature].push(track['audioFeatures'][audioFeature])
-         })}
-       })      
-      }
-
-      //create the dataByAttribute object
-      incomingData.NEWdataByAttribute = {
-        datasets: [],
-        labels: incomingData.trackNames
-      }
-      incomingData.NEWdataByTrack = {
-        datasets: [],
-        labels: incomingData.spotifyAudioFeatures
-      }
-      // create an object for each attribute
-      {incomingData.spotifyAudioFeatures.map((audioFeature) => {
-        var newObject = {
-          label: audioFeature,
-          data: incomingData.audioFeature,
-          fill: false,
-          borderColor: "rgba(94, 177, 208, 1)"
-        }
-        incomingData.NEWdataByTrack.datasets.push(newObject)
-       })}
-
-
-      
-
-      console.log(incomingData)
-      //console.log(incomingData)
-     console.log(this.state.rawDataByTrack instanceof Array)
-
-     //{incomingData.spotifyAudioFeatures.map((attribute) => {
-     // console.log(attribute)
-     //})}
-      
-      
     })
    }
 
   render() {
     return (
       <div className="App">
-        <Chart radarChartData={this.state.radarChartData} lineChartData={this.state.lineChartData} rawData={this.state.rawDataByTrack} spotifyAudioFeatures={this.state.spotifyAudioFeatures} location="Audio Features" legendPosition="bottom"/>
+        <Chart rawIncomingData={this.state.rawIncomingData} radarChartData={this.state.radarChartData} lineChartData={this.state.lineChartData} rawData={this.state.rawDataByTrack} spotifyAudioFeatures={this.state.spotifyAudioFeatures} location="Audio Features" legendPosition="bottom"/>
       </div>
     );
   }
