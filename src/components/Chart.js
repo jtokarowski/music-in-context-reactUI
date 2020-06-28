@@ -15,15 +15,11 @@ class Chart extends Component{
   }
 
   render(){
-    // data unpack goes here
+    // unpack data into format for charts
     // console.log('raw data arriving in chart component', this.props.rawIncomingData)
-    ////////////////////////////////////////////////////////////////
     //listify all the data
+    console.log(this.props)
     var incomingData = {
-      OGdataByTrack: this.props.databyTrack,
-      OGdataByAttribute: this.props.dataByAttribute,
-      spotifyAudioFeatures: this.props.spotifyAudioFeatures,
-      rawData: this.props.rawData,
       trackNames: []
     }
     // pull data from props into new object
@@ -47,11 +43,11 @@ class Chart extends Component{
         })}
       })      
       //create the dataByAttribute object
-      incomingData.NEWdataByAudioFeature = {
+      incomingData.dataByAudioFeature = {
         datasets: [],
         labels: incomingData.trackNames
       }
-      incomingData.NEWdataByTrack = {
+      incomingData.dataByTrack = {
         datasets: [],
         labels: incomingData.spotifyAudioFeatures
       }
@@ -64,17 +60,17 @@ class Chart extends Component{
           borderColor: "rgba(94, 177, 208, 1)"
         }
         console.log(newAudioFeaturesObject)
-        incomingData.NEWdataByAudioFeature.datasets.push(newAudioFeaturesObject)
+        incomingData.dataByAudioFeature.datasets.push(newAudioFeaturesObject)
       })
       // create an object for each track
-      incomingData.rawData.map((track) => {
+      incomingData.rawDataByTrack.map((track) => {
         let newTrackObject = {
           label: track.trackName,
           data: incomingData[track.trackName],
           fill: false,
           borderColor: "rgba(94, 177, 208, 1)"
         }
-        incomingData.NEWdataByTrack.datasets.push(newTrackObject)
+        incomingData.dataByTrack.datasets.push(newTrackObject)
       })
       console.log('incoming data fully unpacked', incomingData)
     }
@@ -91,7 +87,7 @@ class Chart extends Component{
     return (
       <div className="chart">
         <Radar
-          data={incomingData.NEWdataByTrack}
+          data={incomingData.dataByTrack}
           options={{
             //draggable chart js configs
             dragData: true,
@@ -140,7 +136,7 @@ class Chart extends Component{
           }}
         />
         <Line
-          data={incomingData.NEWdataByAudioFeature}
+          data={incomingData.dataByAudioFeature}
           options={{
             //draggable chart js configs
             dragData: true,

@@ -43,13 +43,8 @@ class App extends Component {
       })
     .then(response => response.json())
     .then(data => {
-
       this.setState({
-        rawIncomingData: data,
-        radarChartData: data.databyTrack,
-        lineChartData: data.dataByAttribute,
-        rawDataByTrack: data.rawDataByTrack,
-        spotifyAudioFeatures: data.spotifyAudioFeatures
+        rawIncomingData: data
       });
     })
    }
@@ -57,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart rawIncomingData={this.state.rawIncomingData} radarChartData={this.state.radarChartData} lineChartData={this.state.lineChartData} rawData={this.state.rawDataByTrack} spotifyAudioFeatures={this.state.spotifyAudioFeatures} location="Audio Features" legendPosition="bottom"/>
+        <Chart rawIncomingData={this.state.rawIncomingData} location="Audio Features" legendPosition="bottom"/>
       </div>
     );
   }
