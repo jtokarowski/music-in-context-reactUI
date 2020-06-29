@@ -20,15 +20,8 @@ class App extends Component {
        mode: params.get('mode'),
        form_data: params.get('form_data')
      };
-    // //hard coded for testing
-    //  let data = {
-    //   refresh_token: 'AQACS834nGRrzXZySKHt90Nsu7vZWpKCmCM73hGFiva-nDRE5NHgg6q5XTvlH4tDcAfYvCIaLdMN2EerUVS2CyyYgPXR1crpFxtwvFQYqFJh8bhLQuCThQnto-AMhxszuCs',
-    //   mode: 'playlist',
-    //   form_data: '4MZTnMUwga6imMXcrepZ7y'
-    // };
 
     let posturl = 'https://music-in-context-backend.herokuapp.com/data';
-    //let posturl = 'http://127.0.0.1:7000/data';
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',

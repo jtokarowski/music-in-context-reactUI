@@ -16,11 +16,11 @@ class Chart extends Component{
 
   render(){
     // unpack data into format for charts
-    // console.log('raw data arriving in chart component', this.props.rawIncomingData)
     //listify all the data
-    console.log(this.props)
     var incomingData = {
-      trackNames: []
+      trackNames: [],
+      subTrackData: {},
+      subAudioFeatureData: {}
     }
     // pull data from props into new object
     try {
@@ -30,16 +30,16 @@ class Chart extends Component{
       )
       //assign blank arrays to store data by attribute
       incomingData.spotifyAudioFeatures.map((audioFeature) => {
-        incomingData[audioFeature] = []
+        incomingData.subAudioFeatureData[audioFeature] = []
       })
       // push each data point on to the corresponding array
       incomingData.rawDataByTrack.map((track) => {
         incomingData['trackNames'].push(track.trackName)
-        incomingData[track.trackName] = []
+        incomingData.subTrackData[track.trackName] = []
         //loop thru audio features appending to relevant arrays
         {incomingData.spotifyAudioFeatures.map((audioFeature) => {
-          incomingData[audioFeature].push(track['audioFeatures'][audioFeature])
-          incomingData[track.trackName].push(track['audioFeatures'][audioFeature])
+          incomingData.subAudioFeatureData[audioFeature].push(track['audioFeatures'][audioFeature])
+          incomingData.subTrackData[track.trackName].push(track['audioFeatures'][audioFeature])
         })}
       })      
       //create the dataByAttribute object
@@ -52,27 +52,36 @@ class Chart extends Component{
         labels: incomingData.spotifyAudioFeatures
       }
       // create an object for each attribute
+      let colorIndexAF = 0;
       incomingData.spotifyAudioFeatures.map((audioFeature) => {
         let newAudioFeaturesObject = {
           label: audioFeature,
-          data: incomingData[audioFeature],
+          data: incomingData.subAudioFeatureData[audioFeature],
           fill: false,
-          borderColor: "rgba(94, 177, 208, 1)"
+          borderColor: incomingData.colors[colorIndexAF]
         }
-        console.log(newAudioFeaturesObject)
+        colorIndexAF += 1
+        if (colorIndexAF === incomingData.colors.length){
+          colorIndexAF = 0
+        }
         incomingData.dataByAudioFeature.datasets.push(newAudioFeaturesObject)
       })
       // create an object for each track
+      let colorIndexBT = 0;
       incomingData.rawDataByTrack.map((track) => {
         let newTrackObject = {
           label: track.trackName,
-          data: incomingData[track.trackName],
+          data: incomingData.subTrackData[track.trackName],
           fill: false,
-          borderColor: "rgba(94, 177, 208, 1)"
+          borderColor: incomingData.colors[colorIndexBT]
+        }
+        colorIndexBT += 1
+        if (colorIndexBT === incomingData.colors.length){
+          colorIndexBT = 0
         }
         incomingData.dataByTrack.datasets.push(newTrackObject)
       })
-      console.log('incoming data fully unpacked', incomingData)
+      console.log(incomingData)
     }
     catch (error) {
       console.log('still loading data')
