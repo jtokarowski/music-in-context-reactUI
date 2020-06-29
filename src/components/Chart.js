@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import { Line, Radar } from 'react-chartjs-2';
 import 'chartjs-plugin-dragdata';
 
+var Spinner = require('react-spinkit');
+
+let isLoading = true;
+
 class Chart extends Component{
   constructor(props){
     super(props);
@@ -82,17 +86,26 @@ class Chart extends Component{
         incomingData.dataByTrack.datasets.push(newTrackObject)
       })
       console.log(incomingData)
+      isLoading = false;
     }
     catch (error) {
-      console.log('still loading data')
+      console.log('still loading data');
+      isLoading = true;
     }
 
+    if (isLoading) {
+      return (
+        <div className="chart">
+          <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
+            <Spinner name="ball-triangle-path" />
+          </div>
+          <div>
+            <h1>Loading user data...</h1>
+          </div>
+        </div>
+      )
 
-   //{incomingData.spotifyAudioFeatures.map((attribute) => {
-   // console.log(attribute)
-   //})}
-    ////////////////////////////////////////////////////////////////
-
+    }
     return (
       <div className="chart">
         <Radar
