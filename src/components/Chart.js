@@ -97,7 +97,7 @@ class Chart extends Component{
       return (
         <div className="chart">
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
-            <Spinner name="ball-triangle-path" />
+            <Spinner name='ball-triangle-path' fadeIn='none'/>
           </div>
           <div>
             <h1>Loading user data...</h1>
