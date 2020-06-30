@@ -106,6 +106,61 @@ class Chart extends Component{
       )
 
     }
+    if (incomingData.mode == 'cluster'){
+      return (
+        <div className="chart">
+          <Radar
+            data={incomingData.dataByTrack}
+            options={{
+              //draggable chart js configs
+              dragData: true,
+              dragDataRound:2,
+              showTooltip: true,
+              title:{
+                display:this.props.displayTitle,
+                text:this.props.location,
+                fontSize:25
+              },
+              legend:{
+                display:this.props.displayLegend,
+                position:this.props.legendPosition
+              },
+              scale:{
+                ticks:{
+                  beginAtZero: true,
+                  max: 1
+                }
+              },
+              onDragStart: function (e, element) {
+                // where e = event
+                console.log('dragging ', element)
+                },
+              onDrag: function (e, datasetIndex, index, value) {
+                // change cursor style to grabbing during drag action
+                e.target.style.cursor = 'grabbing'
+                // where e = event
+                },
+              onDragEnd: function (e, datasetIndex, index, value) {
+                // restore default cursor style upon drag release
+                console.log('done dragging!')
+                console.log(datasetIndex, index, value)
+                e.target.style.cursor = 'default'
+                // where e = event
+                },
+              //enable grab icon when user hovers over control points
+              hover: {
+                onHover: function(e) {
+                  // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
+                  const point = this.getElementAtEvent(e)
+                  if (point.length) e.target.style.cursor = 'grab'
+                  else e.target.style.cursor = 'default'
+                }
+              }
+            }}
+          />
+        </div>
+      )  
+    }
     return (
       <div className="chart">
         <Radar
