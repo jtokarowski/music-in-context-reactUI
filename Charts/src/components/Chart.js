@@ -9,6 +9,8 @@ let isLoading = true;
 class Chart extends Component{
   constructor(props){
     super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDrag = this.props.onDrag.bind(this);
   }
 
   static defaultProps = {
@@ -18,7 +20,19 @@ class Chart extends Component{
     location:'City'
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log('submitted')
+  }
+
+  testfunction(){
+    console.log("here")
+  }
+
+
   render(){
+
+    // this.props.onDrag();
     // unpack data into format for charts
     //listify all the data
     var incomingData = {
@@ -85,7 +99,6 @@ class Chart extends Component{
         }
         incomingData.dataByTrack.datasets.push(newTrackObject)
       })
-      console.log(incomingData)
       isLoading = false;
     }
     catch (error) {
@@ -95,27 +108,23 @@ class Chart extends Component{
 
     if (isLoading) {
       return (
-        <div className="chart">
+        <div className="loading">
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
             <Spinner name='ball-triangle-path' fadeIn='none'/>
           </div>
           <div>
-            <h1>Loading user data...</h1>
+            <h1>Loading track data...</h1>
           </div>
         </div>
       )
 
     }
-    if (incomingData.mode == 'cluster'){
+    if (incomingData.mode === 'cluster'){
       return (
         <div className="chart">
           <Radar
             data={incomingData.dataByTrack}
             options={{
-              //draggable chart js configs
-              dragData: true,
-              dragDataRound:2,
-              showTooltip: true,
               title:{
                 display:this.props.displayTitle,
                 text:this.props.location,
@@ -130,31 +139,6 @@ class Chart extends Component{
                   beginAtZero: true,
                   max: 1
                 }
-              },
-              onDragStart: function (e, element) {
-                // where e = event
-                console.log('dragging ', element)
-                },
-              onDrag: function (e, datasetIndex, index, value) {
-                // change cursor style to grabbing during drag action
-                e.target.style.cursor = 'grabbing'
-                // where e = event
-                },
-              onDragEnd: function (e, datasetIndex, index, value) {
-                // restore default cursor style upon drag release
-                console.log('done dragging!')
-                console.log(datasetIndex, index, value)
-                e.target.style.cursor = 'default'
-                // where e = event
-                },
-              //enable grab icon when user hovers over control points
-              hover: {
-                onHover: function(e) {
-                  // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
-                  const point = this.getElementAtEvent(e)
-                  if (point.length) e.target.style.cursor = 'grab'
-                  else e.target.style.cursor = 'default'
-                }
               }
             }}
           />
@@ -163,10 +147,12 @@ class Chart extends Component{
     }
     return (
       <div className="chart">
+        <form onSubmit={this.handleSubmit}><input type="submit" value="Request new Tracks" /></form>
         <Radar
           data={incomingData.dataByTrack}
           options={{
             //draggable chart js configs
+            func: this.props.onDrag,
             dragData: true,
             dragDataRound:2,
             showTooltip: true,
@@ -187,7 +173,7 @@ class Chart extends Component{
             },
             onDragStart: function (e, element) {
               // where e = event
-              console.log('dragging ', element)
+              //console.log('dragging ', element)
               },
             onDrag: function (e, datasetIndex, index, value) {
               // change cursor style to grabbing during drag action
@@ -196,8 +182,17 @@ class Chart extends Component{
               },
             onDragEnd: function (e, datasetIndex, index, value) {
               // restore default cursor style upon drag release
-              console.log('done dragging!')
-              console.log(datasetIndex, index, value)
+              //console.log('done dragging!')
+              console.log('radar')
+              console.log('adjust the value of ',incomingData.spotifyAudioFeatures[index],' for the track ',incomingData.dataByTrack.datasets[datasetIndex]['label'], 'which is index number ',datasetIndex,'in the set to a value of ', value)
+              console.log('previous value for line',incomingData.dataByAudioFeature.datasets[index]['data'][datasetIndex])
+              //incomingData.dataByAudioFeature.datasets[index]['data'][datasetIndex] = value
+
+              // console.log(datasetIndex, index, value)
+              // console.log(incomingData)
+              // console.log('previous value',incomingData.dataByTrack.datasets[datasetIndex]['data'][index])
+              // console.log('new value', value)
+              // console.log(incomingData.dataByTrack.labels[datasetIndex])
               e.target.style.cursor = 'default'
               // where e = event
               },
@@ -217,7 +212,7 @@ class Chart extends Component{
           options={{
             //draggable chart js configs
             dragData: true,
-            dragDataRound:1,
+            dragDataRound:2,
             title:{
               display:this.props.displayTitle,
               text:this.props.location,
@@ -235,6 +230,32 @@ class Chart extends Component{
             legend:{
               display:this.props.displayLegend,
               position:this.props.legendPosition
+            },
+            onDragStart: function (e, element) {
+              // where e = event
+              },
+            onDrag: function (e, datasetIndex, index, value) {
+              // change cursor style to grabbing during drag action
+              e.target.style.cursor = 'grabbing'
+              // where e = event
+              },
+            onDragEnd: function (e, datasetIndex, index, value) {
+              // restore default cursor style upon drag release
+              console.log('line')
+              console.log('adjust the value of ',incomingData.spotifyAudioFeatures[datasetIndex],' for the track ',incomingData.dataByAudioFeature.labels[index], 'which is index number ',index,'in the set to a value of ', value)
+              console.log('previous value for radar',incomingData.dataByTrack.datasets[index]['data'][datasetIndex])
+              incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
+              e.target.style.cursor = 'default'
+              // where e = event
+              },
+            //enable grab icon when user hovers over control points
+            hover: {
+              onHover: function(e) {
+                // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
+                const point = this.getElementAtEvent(e)
+                if (point.length) e.target.style.cursor = 'grab'
+                else e.target.style.cursor = 'default'
+              }
             }
           }}
         />

@@ -10,16 +10,25 @@ class App extends Component {
     this.state = {
     }
   }
+
+  handleDrag(){
+    console.log('arrived in the top level app function')
+  }
  
    componentDidMount(){
      // grab refresh token from URL
      let search = window.location.search;
      let params = new URLSearchParams(search);
-     let data = {
-       refresh_token: params.get('refresh_token'),
-       mode: params.get('mode'),
-       form_data: params.get('form_data')
-     };
+    //  let data = {
+    //    refresh_token: params.get('refresh_token'),
+    //    mode: params.get('mode'),
+    //    form_data: params.get('form_data')
+    //  };
+    let data = {
+      refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
+      mode: 'playlist',
+      form_data: '0GCBYmFvWnyY5ufGSXeVvg'
+    }
 
     let posturl = 'https://music-in-context-backend.herokuapp.com/data';
     //send a post to the backend API to run the calcs and respond with data
@@ -42,7 +51,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart rawIncomingData={this.state.rawIncomingData} location="Audio Features" legendPosition="bottom"/>
+        <Chart rawIncomingData={this.state.rawIncomingData} location="Audio Features" legendPosition="bottom" onDrag={() => this.handleDrag()} />
       </div>
     );
   }
