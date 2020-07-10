@@ -7,32 +7,18 @@ var Spinner = require('react-spinkit');
 let isLoading = true;
 
 class Chart extends Component{
-  constructor(props){
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDrag = this.props.onDrag.bind(this);
-  }
 
   static defaultProps = {
     displayTitle:true,
     displayLegend: true,
-    legendPosition:'right',
-    location:'City'
+    legendPosition:'right'
+    //location:'City'
   }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log('submitted')
-  }
-
-  testfunction(){
-    console.log("here")
-  }
-
 
   render(){
 
-    // this.props.onDrag();
+    this.props.onDrag(1,1,1);
+    //this.props.onSubmit();
     // unpack data into format for charts
     //listify all the data
     var incomingData = {
@@ -127,7 +113,7 @@ class Chart extends Component{
             options={{
               title:{
                 display:this.props.displayTitle,
-                text:this.props.location,
+                text:this.props.title,
                 fontSize:25
               },
               legend:{
@@ -147,18 +133,17 @@ class Chart extends Component{
     }
     return (
       <div className="chart">
-        <form onSubmit={this.handleSubmit}><input type="submit" value="Request new Tracks" /></form>
+      <form onSubmit={this.props.onSubmit}><input type="submit" value="Request new tracks" /></form>
         <Radar
           data={incomingData.dataByTrack}
           options={{
             //draggable chart js configs
-            func: this.props.onDrag,
             dragData: true,
             dragDataRound:2,
             showTooltip: true,
             title:{
               display:this.props.displayTitle,
-              text:this.props.location,
+              text:this.props.title,
               fontSize:25
             },
             legend:{
@@ -215,7 +200,7 @@ class Chart extends Component{
             dragDataRound:2,
             title:{
               display:this.props.displayTitle,
-              text:this.props.location,
+              text:this.props.title,
               fontSize:25
             },
             scales:{
@@ -244,7 +229,7 @@ class Chart extends Component{
               console.log('line')
               console.log('adjust the value of ',incomingData.spotifyAudioFeatures[datasetIndex],' for the track ',incomingData.dataByAudioFeature.labels[index], 'which is index number ',index,'in the set to a value of ', value)
               console.log('previous value for radar',incomingData.dataByTrack.datasets[index]['data'][datasetIndex])
-              incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
+              //incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
               e.target.style.cursor = 'default'
               // where e = event
               },

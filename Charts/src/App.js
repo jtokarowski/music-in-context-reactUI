@@ -11,8 +11,14 @@ class App extends Component {
     }
   }
 
-  handleDrag(){
-    console.log('arrived in the top level app function')
+  handleDrag(datasetIndex, index, value){
+    console.log('arrived in the parent component')
+    console.log(datasetIndex, index, value)
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+    console.log('submitted to the parent component')
   }
  
    componentDidMount(){
@@ -51,7 +57,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart rawIncomingData={this.state.rawIncomingData} location="Audio Features" legendPosition="bottom" onDrag={() => this.handleDrag()} />
+        <Chart rawIncomingData={this.state.rawIncomingData} title="Audio Features" legendPosition="bottom" onDrag={() => this.handleDrag()} onSubmit={() => this.handleSubmit()} />
       </div>
     );
   }
