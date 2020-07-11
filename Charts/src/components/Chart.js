@@ -16,8 +16,9 @@ class Chart extends Component{
   }
 
   render(){
-
-    this.props.onDrag(1,1,1);
+    
+    
+    //this.props.onDrag(1,1,1);
     //this.props.onSubmit();
     // unpack data into format for charts
     //listify all the data
@@ -133,7 +134,7 @@ class Chart extends Component{
     }
     return (
       <div className="chart">
-      <form onSubmit={this.props.onSubmit}><input type="submit" value="Request new tracks" /></form>
+      <form onSubmit={()=>this.props.onSubmit(1)}><input type="submit" value="Request new tracks" /></form>
         <Radar
           data={incomingData.dataByTrack}
           options={{
@@ -165,12 +166,14 @@ class Chart extends Component{
               e.target.style.cursor = 'grabbing'
               // where e = event
               },
-            onDragEnd: function (e, datasetIndex, index, value) {
+            onDragEnd: (e, datasetIndex, index, value) => {
               // restore default cursor style upon drag release
               //console.log('done dragging!')
-              console.log('radar')
-              console.log('adjust the value of ',incomingData.spotifyAudioFeatures[index],' for the track ',incomingData.dataByTrack.datasets[datasetIndex]['label'], 'which is index number ',datasetIndex,'in the set to a value of ', value)
-              console.log('previous value for line',incomingData.dataByAudioFeature.datasets[index]['data'][datasetIndex])
+              // console.log('radar')
+              // console.log('adjust the value of ',incomingData.spotifyAudioFeatures[index],' for the track ',incomingData.dataByTrack.datasets[datasetIndex]['label'], 'which is index number ',datasetIndex,'in the set to a value of ', value)
+              // console.log('previous value for line',incomingData.dataByAudioFeature.datasets[index]['data'][datasetIndex])
+              this.props.onDrag(datasetIndex, index, value);
+              //onSubmit={()=>this.props.onSubmit(1)}
               //incomingData.dataByAudioFeature.datasets[index]['data'][datasetIndex] = value
 
               // console.log(datasetIndex, index, value)
@@ -224,11 +227,12 @@ class Chart extends Component{
               e.target.style.cursor = 'grabbing'
               // where e = event
               },
-            onDragEnd: function (e, datasetIndex, index, value) {
+            onDragEnd: (e, datasetIndex, index, value) => {
               // restore default cursor style upon drag release
-              console.log('line')
-              console.log('adjust the value of ',incomingData.spotifyAudioFeatures[datasetIndex],' for the track ',incomingData.dataByAudioFeature.labels[index], 'which is index number ',index,'in the set to a value of ', value)
-              console.log('previous value for radar',incomingData.dataByTrack.datasets[index]['data'][datasetIndex])
+              //console.log('line')
+              //console.log('adjust the value of ',incomingData.spotifyAudioFeatures[datasetIndex],' for the track ',incomingData.dataByAudioFeature.labels[index], 'which is index number ',index,'in the set to a value of ', value)
+              //console.log('previous value for radar',incomingData.dataByTrack.datasets[index]['data'][datasetIndex])
+              this.props.onDrag(index, datasetIndex, value);
               //incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
               e.target.style.cursor = 'default'
               // where e = event

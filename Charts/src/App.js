@@ -11,14 +11,32 @@ class App extends Component {
     }
   }
 
-  handleDrag(datasetIndex, index, value){
-    console.log('arrived in the parent component')
-    console.log(datasetIndex, index, value)
+  handleDrag = (datasetIndex, index, value) => {
+    // console.log('this.state before update')
+    // console.log(this.state)
+    // console.log('arrived in the parent component')
+    // console.log(datasetIndex, index, value)
+    let selectedAttribute = this.state.rawIncomingData.spotifyAudioFeatures[index]
+    //let trackToEdit = this.state.rawIncomingData.rawDataByTrack[datasetIndex]
+    //console.log(selectedAttribute, trackToEdit)
+    this.setState(prevState => {
+      let selectedTrack = Object.assign({}, prevState.rawIncomingData.rawDataByTrack[datasetIndex]);  // creating copy of state variable jasper
+      selectedTrack.audioFeatures[selectedAttribute] = value;                     // update the name property, assign a new value                 
+      return { selectedTrack };                                 // return new object jasper object
+    })
+    //this.setState((state, selectedAttribute, trackToEdit) => ({}))
+    //console.log(selectedAttribute)
+    //console.log(this.state.rawIncomingData.rawDataByTrack[datasetIndex])
+    //console.log('original value', this.state.rawIncomingData.rawDataByTrack[datasetIndex]['audioFeatures'][selectedAttribute])
+    //this.state.rawIncomingData.rawDataByTrack[datasetIndex]['audioFeatures'][selectedAttribute] = value
+    //console.log('this.state after update')
+    //console.log(this.state)
   }
 
-  handleSubmit(event){
-    event.preventDefault();
+  handleSubmit(param){
+    //event.preventDefault();
     console.log('submitted to the parent component')
+    console.log(param)
   }
  
    componentDidMount(){
@@ -33,7 +51,7 @@ class App extends Component {
     let data = {
       refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
       mode: 'playlist',
-      form_data: '0GCBYmFvWnyY5ufGSXeVvg'
+      form_data: '4xWULTfuUD3oW4hDqwztoE'
     }
 
     let posturl = 'https://music-in-context-backend.herokuapp.com/data';
@@ -57,7 +75,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart rawIncomingData={this.state.rawIncomingData} title="Audio Features" legendPosition="bottom" onDrag={() => this.handleDrag()} onSubmit={() => this.handleSubmit()} />
+        <Chart rawIncomingData={this.state.rawIncomingData} title="Audio Features" legendPosition="bottom" onDrag={(datasetIndex, index, value) => this.handleDrag(datasetIndex, index, value)} onSubmit={(value) => this.handleSubmit(value)} />
       </div>
     );
   }
