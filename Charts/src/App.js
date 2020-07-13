@@ -12,31 +12,48 @@ class App extends Component {
   }
 
   handleDrag = (datasetIndex, index, value) => {
-    // console.log('this.state before update')
-    // console.log(this.state)
-    // console.log('arrived in the parent component')
-    // console.log(datasetIndex, index, value)
-    let selectedAttribute = this.state.rawIncomingData.spotifyAudioFeatures[index]
-    //let trackToEdit = this.state.rawIncomingData.rawDataByTrack[datasetIndex]
-    //console.log(selectedAttribute, trackToEdit)
-    this.setState(prevState => {
+    let selectedAttribute = this.state.rawIncomingData.spotifyAudioFeatures[index]  
+    this.setState(prevState => { //https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
       let selectedTrack = Object.assign({}, prevState.rawIncomingData.rawDataByTrack[datasetIndex]);  // creating copy of state variable jasper
-      selectedTrack.audioFeatures[selectedAttribute] = value;                     // update the name property, assign a new value                 
-      return { selectedTrack };                                 // return new object jasper object
+      selectedTrack.audioFeatures[selectedAttribute] = value;
+      selectedTrack.audioFeatures['shouldChange'] = 1;                                    
+      return { selectedTrack };                                 
     })
-    //this.setState((state, selectedAttribute, trackToEdit) => ({}))
-    //console.log(selectedAttribute)
-    //console.log(this.state.rawIncomingData.rawDataByTrack[datasetIndex])
-    //console.log('original value', this.state.rawIncomingData.rawDataByTrack[datasetIndex]['audioFeatures'][selectedAttribute])
-    //this.state.rawIncomingData.rawDataByTrack[datasetIndex]['audioFeatures'][selectedAttribute] = value
-    //console.log('this.state after update')
-    //console.log(this.state)
   }
 
-  handleSubmit(param){
-    //event.preventDefault();
+  handleSubmit(event){
+    event.preventDefault();
     console.log('submitted to the parent component')
-    console.log(param)
+    //TODO send this state to the backend
+    //TODO fix the default behavior
+    // let data = {
+    //   refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
+    //   mode: 'playlist',
+    //   form_data: '1qYIatRJ6FRdmZGu4kYM3s'
+    // }
+
+    let posturl = 'http://127.0.0.1:7000/changeset';
+    //send a post to the backend API to run the calcs and respond with data
+    fetch(posturl,{
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify({
+          previousTrackList: this.state.rawIncomingData.rawDataByTrack,
+          refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE'
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+    .then(response => response.json())
+    .then(data => {
+      this.setState(prevState => { //https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
+        let rawIncomingData = Object.assign({}, prevState.rawIncomingData);
+        rawIncomingData.rawDataByTrack = data
+        return { rawIncomingData };
+      })
+    })
+    .then(console.log(this.state))
   }
  
    componentDidMount(){
@@ -50,11 +67,12 @@ class App extends Component {
     //  };
     let data = {
       refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
-      mode: 'playlist',
-      form_data: '4xWULTfuUD3oW4hDqwztoE'
+      mode: 'tunnel',
+      form_data: '5kbJeLyeywPmSKMpjUrZu8'
     }
 
-    let posturl = 'https://music-in-context-backend.herokuapp.com/data';
+    let posturl = 'http://127.0.0.1:7000/data';
+    //let posturl = 'https://music-in-context-backend.herokuapp.com/data';
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',
