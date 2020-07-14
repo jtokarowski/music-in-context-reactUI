@@ -22,15 +22,15 @@ class App extends Component {
   handleSubmit(event){
     event.preventDefault();
     console.log('submitted to the parent component')
-    //TODO send this state to the backend
-    //TODO fix the default behavior
-    // let data = {
-    //   refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
-    //   mode: 'playlist',
-    //   form_data: '1qYIatRJ6FRdmZGu4kYM3s'
-    // }
+    // grab refresh token from URL
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    let data = {
+      refresh_token: params.get('refresh_token'),
+      mode: params.get('mode')
+    };
 
-    let posturl = 'http://127.0.0.1:7000/changeset';
+    let posturl = 'https://music-in-context-backend.herokuapp.com/changeset';
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',
@@ -38,8 +38,8 @@ class App extends Component {
         body: JSON.stringify({
           previousTrackList: this.state.rawIncomingData.rawDataByTrack,
           previousTrackIDs: this.state.rawIncomingData.trackIDs,
-          refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
-          mode: 'tunnel',
+          refresh_token: data.refresh_token,
+          mode: data.mode,
         }),
         headers: {
           'Content-Type': 'application/json'
@@ -49,7 +49,8 @@ class App extends Component {
     .then(data => {
       this.setState(prevState => { //https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
         let rawIncomingData = Object.assign({}, prevState.rawIncomingData);
-        rawIncomingData.rawDataByTrack = data
+        rawIncomingData.rawDataByTrack = data.newTracks;
+        rawIncomingData.trackIDs = data.trackIDs;
         return { rawIncomingData };
       })
     })
@@ -60,19 +61,13 @@ class App extends Component {
      // grab refresh token from URL
      let search = window.location.search;
      let params = new URLSearchParams(search);
-    //  let data = {
-    //    refresh_token: params.get('refresh_token'),
-    //    mode: params.get('mode'),
-    //    form_data: params.get('form_data')
-    //  };
-    let data = {
-      refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
-      mode: 'tunnel',
-      form_data: '5kbJeLyeywPmSKMpjUrZu8'
-    }
+     let data = {
+       refresh_token: params.get('refresh_token'),
+       mode: params.get('mode'),
+       form_data: params.get('form_data')
+     };
 
-    let posturl = 'http://127.0.0.1:7000/data';
-    //let posturl = 'https://music-in-context-backend.herokuapp.com/data';
+    let posturl = 'https://music-in-context-backend.herokuapp.com/data';
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',
