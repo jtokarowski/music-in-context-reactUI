@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import Chart from './components/Chart';
 
-
-
 class App extends Component {
   constructor(){
     super();
@@ -39,7 +37,9 @@ class App extends Component {
         method: 'POST',
         body: JSON.stringify({
           previousTrackList: this.state.rawIncomingData.rawDataByTrack,
-          refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE'
+          previousTrackIDs: this.state.rawIncomingData.trackIDs,
+          refresh_token: 'AQArc_JXxZZSHt0ecz5VbBjRjURcibr89qfCuqh06JuZBGRCnzZkhCpLcS16XxnqfL570HStbprN9I6RCsn3v8eBbJvIda6__MVXvcKrSrcl9qlMWz2Y_1F4OKDtqzQIRjE',
+          mode: 'tunnel',
         }),
         headers: {
           'Content-Type': 'application/json'
