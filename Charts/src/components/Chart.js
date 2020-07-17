@@ -130,106 +130,117 @@ class Chart extends Component{
     }
     return (
       <div className="chart">
-      <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Request new tracks" /></form>
-      <form onSubmit={(e)=>this.props.onCommitSet(e)}><input type="submit" value="Commit current set to Spotify" /></form>
-      
-        <Radar
-          data={incomingData.dataByTrack}
-          options={{
-            //draggable chart js configs
-            dragData: true,
-            dragDataRound:2,
-            showTooltip: true,
-            title:{
-              display:this.props.displayTitle,
-              text:this.props.title,
-              fontSize:25
-            },
-            legend:{
-              display:this.props.displayLegend,
-              position:this.props.legendPosition
-            },
-            scale:{
-              ticks:{
-                beginAtZero: true,
-                max: 1
-              }
-            },
-            onDragStart: function (e, element) {
-              // where e = event
-              //console.log('dragging ', element)
-              },
-            onDrag: function (e, datasetIndex, index, value) {
-              // change cursor style to grabbing during drag action
-              e.target.style.cursor = 'grabbing'
-              // where e = event
-              },
-            onDragEnd: (e, datasetIndex, index, value) => {              
-              this.props.onDrag(datasetIndex, index, value);
-              // restore default cursor style upon drag release
-              e.target.style.cursor = 'default'
-              // where e = event
-              },
-            //enable grab icon when user hovers over control points
-            hover: {
-              onHover: function(e) {
-                // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
-                const point = this.getElementAtEvent(e)
-                if (point.length) e.target.style.cursor = 'grab'
-                else e.target.style.cursor = 'default'
-              }
-            }
-          }}
-        />
-        <Line
-          data={incomingData.dataByAudioFeature}
-          options={{
-            //draggable chart js configs
-            dragData: true,
-            dragDataRound:2,
-            title:{
-              display:this.props.displayTitle,
-              text:this.props.title,
-              fontSize:25
-            },
-            scales:{
-              yAxes:[{
-                ticks:{
-                  min: 0,
-                  max: 1,
-                  stepSize: 0.1
+        <div className="topRow">
+          <div className="buttons">
+            <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Request new tracks" /></form>
+            <form onSubmit={(e)=>this.props.onCommitSet(e)}><input type="submit" value="Commit current set to Spotify" /></form>
+          </div>
+          <div className="radar">
+            <Radar
+              data={incomingData.dataByTrack}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                //draggable chart js configs
+                dragData: true,
+                dragDataRound:2,
+                showTooltip: true,
+                title:{
+                  display:false,
+                  text:this.props.title,
+                  fontSize:25
+                },
+                legend:{
+                  display:true,
+                  position:'right'
+                },
+                scale:{
+                  ticks:{
+                    beginAtZero: true,
+                    max: 1
+                  } 
+                },
+                onDragStart: function (e, element) {
+                  // where e = event
+                  //console.log('dragging ', element)
+                  },
+                onDrag: function (e, datasetIndex, index, value) {
+                  // change cursor style to grabbing during drag action
+                  e.target.style.cursor = 'grabbing'
+                  // where e = event
+                  },
+                onDragEnd: (e, datasetIndex, index, value) => {              
+                  this.props.onDrag(datasetIndex, index, value);
+                  // restore default cursor style upon drag release
+                  e.target.style.cursor = 'default'
+                  // where e = event
+                  },
+                //enable grab icon when user hovers over control points
+                hover: {
+                  onHover: function(e) {
+                    // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
+                    const point = this.getElementAtEvent(e)
+                    if (point.length) e.target.style.cursor = 'grab'
+                    else e.target.style.cursor = 'default'
+                  }
                 }
-              }]
-            },
-            legend:{
-              display:this.props.displayLegend,
-              position:this.props.legendPosition
-            },
-            onDragStart: function (e, element) {
-              // where e = event
+              }}
+            />
+          </div>
+        </div>
+        <div className="line">
+          <Line
+            data={incomingData.dataByAudioFeature}
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              //draggable chart js configs
+              dragData: true,
+              dragDataRound:2,
+              title:{
+                display:false,
+                text:this.props.title,
+                fontSize:25
               },
-            onDrag: function (e, datasetIndex, index, value) {
-              // change cursor style to grabbing during drag action
-              e.target.style.cursor = 'grabbing'
-              // where e = event
+              scales:{
+                yAxes:[{
+                  ticks:{
+                    min: 0,
+                    max: 1,
+                    stepSize: 0.1
+                  }
+                }]
               },
-            onDragEnd: (e, datasetIndex, index, value) => {
-              this.props.onDrag(index, datasetIndex, value);
-              //incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
-              e.target.style.cursor = 'default'
-              // where e = event
+              legend:{
+                display:this.props.displayLegend,
+                position:'right'
               },
-            //enable grab icon when user hovers over control points
-            hover: {
-              onHover: function(e) {
-                // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
-                const point = this.getElementAtEvent(e)
-                if (point.length) e.target.style.cursor = 'grab'
-                else e.target.style.cursor = 'default'
+              onDragStart: function (e, element) {
+                // where e = event
+                },
+              onDrag: function (e, datasetIndex, index, value) {
+                // change cursor style to grabbing during drag action
+                e.target.style.cursor = 'grabbing'
+                // where e = event
+                },
+              onDragEnd: (e, datasetIndex, index, value) => {
+                this.props.onDrag(index, datasetIndex, value);
+                //incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
+                e.target.style.cursor = 'default'
+                // where e = event
+                },
+              //enable grab icon when user hovers over control points
+              hover: {
+                onHover: function(e) {
+                  // indicate that a datapoint is draggable by showing the 'grab' cursor when hovered
+                  const point = this.getElementAtEvent(e)
+                  if (point.length) e.target.style.cursor = 'grab'
+                  else e.target.style.cursor = 'default'
+                }
               }
-            }
-          }}
-        />
+            }}
+            />
+          </div>
       </div>
     )
   }
