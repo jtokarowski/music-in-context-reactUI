@@ -130,7 +130,9 @@ class Chart extends Component{
     }
     return (
       <div className="chart">
-      <form onSubmit={(e)=>this.props.onSubmit(e)}><input type="submit" value="Request new tracks" /></form>
+      <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Request new tracks" /></form>
+      <form onSubmit={(e)=>this.props.onCommitSet(e)}><input type="submit" value="Commit current set to Spotify" /></form>
+      
         <Radar
           data={incomingData.dataByTrack}
           options={{
@@ -163,10 +165,7 @@ class Chart extends Component{
               // where e = event
               },
             onDragEnd: (e, datasetIndex, index, value) => {              
-              // console.log('adjust the value of ',incomingData.spotifyAudioFeatures[index],' for the track ',incomingData.dataByTrack.datasets[datasetIndex]['label'], 'which is index number ',datasetIndex,'in the set to a value of ', value)
-
               this.props.onDrag(datasetIndex, index, value);
-
               // restore default cursor style upon drag release
               e.target.style.cursor = 'default'
               // where e = event
@@ -215,10 +214,6 @@ class Chart extends Component{
               // where e = event
               },
             onDragEnd: (e, datasetIndex, index, value) => {
-              // restore default cursor style upon drag release
-              //console.log('line')
-              //console.log('adjust the value of ',incomingData.spotifyAudioFeatures[datasetIndex],' for the track ',incomingData.dataByAudioFeature.labels[index], 'which is index number ',index,'in the set to a value of ', value)
-              //console.log('previous value for radar',incomingData.dataByTrack.datasets[index]['data'][datasetIndex])
               this.props.onDrag(index, datasetIndex, value);
               //incomingData.dataByTrack.datasets[index]['data'][datasetIndex] = value
               e.target.style.cursor = 'default'

@@ -19,9 +19,42 @@ class App extends Component {
     })
   }
 
-  handleSubmit(event){
+  handleReset = (event) =>{
     event.preventDefault();
-    console.log('submitted to the parent component')
+    console.log("Reset triggered")
+    //TODO this doesn't work
+    this.setState({
+      rawIncomingData: this.state.previousState
+    })
+  }
+
+  handleCommitSet(event){
+    event.preventDefault();
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    let data = {
+      refresh_token: params.get('refresh_token'),
+      mode: params.get('mode')
+    };
+
+    let posturl = 'https://music-in-context-backend.herokuapp.com/commitplaylist';
+    //send a post to the backend API to run the calcs and respond with data
+    fetch(posturl,{
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify({
+          refresh_token: data.refresh_token,
+          mode: data.mode,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      })
+    .then(console.log("Sent to Spotify"))
+  }
+
+  handleRequestNewTracks(event){
+    event.preventDefault();
     // grab refresh token from URL
     let search = window.location.search;
     let params = new URLSearchParams(search);
@@ -80,7 +113,8 @@ class App extends Component {
     .then(response => response.json())
     .then(data => {
       this.setState({
-        rawIncomingData: data
+        rawIncomingData: data,
+        previousState: data
       });
     })
    }
@@ -88,7 +122,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart rawIncomingData={this.state.rawIncomingData} title="Audio Features" legendPosition="bottom" onDrag={(datasetIndex, index, value) => this.handleDrag(datasetIndex, index, value)} onSubmit={(value) => this.handleSubmit(value)} />
+        <Chart rawIncomingData={this.state.rawIncomingData} title="Audio Features" legendPosition="bottom" onDrag={(datasetIndex, index, value) => this.handleDrag(datasetIndex, index, value)} onRequestNewTracks={(value) => this.handleRequestNewTracks(value)} onCommitSet={(value) => this.handleCommitSet(value)} onReset={(value) => this.handleReset(value)}/>
       </div>
     );
   }
