@@ -132,8 +132,8 @@ class Chart extends Component{
       <div className="chart">
         <div className="topRow">
           <div className="buttons">
-            <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Request new tracks" /></form>
-            <form onSubmit={(e)=>this.props.onCommitSet(e)}><input type="submit" value="Commit current set to Spotify" /></form>
+            <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Swap changed tracks with new recommendations" /></form>
+            <form onSubmit={(e)=>this.props.onCommitSet(e)}><input type="submit" value="Upload this playlist to Spotify" /></form>
           </div>
           <div className="radar">
             <Radar
