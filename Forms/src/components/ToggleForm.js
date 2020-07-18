@@ -18,31 +18,37 @@ class ToggleForm extends React.Component {
       playlists: [],
       playlistIDs: [],
       playlistNames: [],
-      playlistIndicators: []
+      playlistIndicators: [],
+      clusters:[],
+      clusterIDs:[],
+      clusterDescriptions: [],
+      clusterMostFrequentArtists:[],
+      clusterMostFrequentGenres:[],
+      clusterIndicators:[],
     };
   }
 
-  handleChange(e, playlistName) {
-    var indexNumber = this.state.playlistNames.indexOf(playlistName);
+  handleChange(e, clusterDescrip) {
+    var indexNumber = this.state.clusterDescriptions.indexOf(clusterDescrip);
     const newState = {};
 
-    newState[playlistName] = !this.state[playlistName];
+    newState[clusterDescrip] = !this.state[clusterDescrip];
     this.setState({ ...this.state, ...newState });
-    this.state.playlistIndicators[indexNumber] = newState[playlistName]
+    this.state.clusterIndicators[indexNumber] = newState[clusterDescrip]
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    var selectedPlaylists = []
-    for(let i=0; i<this.state.playlistIndicators.length; i++) {
-      if(this.state.playlistIndicators[i]){
-        selectedPlaylists.push(this.state.playlistIDs[i])
+    var selectedClusters = []
+    for(let i=0; i<this.state.clusterIndicators.length; i++) {
+      if(this.state.clusterIndicators[i]){
+        selectedClusters.push(this.state.clusterIDs[i])
       }
     }
-    let playlistIDstring = selectedPlaylists.join(',')
+    let clusterIDstring = selectedClusters.join(',')
     
     let baseURL = 'https://music-in-context.herokuapp.com/ui?'
-    let fullURL = baseURL.concat('refresh_token=',this.props.refreshToken,'&form_data=',playlistIDstring,'&mode=',this.props.mode)
+    let fullURL = baseURL.concat('refresh_token=',this.props.refreshToken,'&form_data=',clusterIDstring,'&mode=',this.props.mode)
 
   window.location.href = fullURL
   }
@@ -57,6 +63,14 @@ class ToggleForm extends React.Component {
         this.state.playlistIDs.push(playlist.playlistID);
         this.state.playlistNames.push(playlist.playlistName);
         this.state.playlistIndicators.push(false);
+
+        //NEW
+        this.state.clusters.push(playlist);
+        this.state.clusterIDs.push(playlist.clusterNumber);
+        let clusterDescription = "Contains the following genres: "+ playlist.mostFrequentGenres.join()+" and the following artists: "+ playlist.mostFrequentArtists.join();
+        console.log(clusterDescription)
+        this.state.clusterDescriptions.push(clusterDescription)
+        this.state.clusterIndicators.push(false);
       }
       })
       firstrun = false;
@@ -65,14 +79,14 @@ class ToggleForm extends React.Component {
       let checkBoxComponentList = [];
       
       for(let i=0; i<this.state.playlists.length; i++) {
-        let playlistName = this.state.playlistNames[i];
+        let clusterName = this.state.clusterDescriptions[i];
         checkBoxComponentList.push(
         <FormCheckbox
           toggle
-          checked= {this.state[playlistName]}
-          onChange={e => this.handleChange(e, playlistName)}
+          checked= {this.state[clusterName]}
+          onChange={e => this.handleChange(e, clusterName)}
         >
-          {playlistName}
+          {clusterName}
         </FormCheckbox>
         )
       }

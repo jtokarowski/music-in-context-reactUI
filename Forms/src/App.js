@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import RadioForm from './components/RadioForm';
 import ToggleForm from './components/ToggleForm';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
@@ -23,7 +22,7 @@ class App extends Component {
        mode: params.get('mode')
      };
     
-    let posturl = 'https://music-in-context-backend.herokuapp.com/getuserplaylists';
+    let posturl = 'https://music-in-context-backend.herokuapp.com/clustertracks';
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',
@@ -37,7 +36,7 @@ class App extends Component {
     .then(data => {
       console.log('data from post', data)
       this.setState({
-        apiData: data.userPlaylists,
+        clusters: data.clusters,
         refreshToken: data.refreshToken,
         mode: data.mode
       });
@@ -45,29 +44,23 @@ class App extends Component {
   }
 
   render() {
-    if(this.state.mode === 'playlist'){
-    return (
-      <div className="App">
-        <RadioForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.apiData}/>
-      </div>
-    );
-  }
-  else if(this.state.mode === 'cluster'){
-    return (
-      <div className="App">
-        <ToggleForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.apiData}/>
-      </div>
-    );
+  if(this.state.mode === 'tunnel'){
+    return(
+    <div className="App">
+      <ToggleForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.clusters}/>
+    </div>
+    )
   }
   else{
     return(
       <div className="loading">
         <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
           <Spinner name='ball-triangle-path' fadeIn='none'/>
+          <div>
+            <h1>Loading user playlists...</h1>
+          </div>
         </div>
-        <div>
-          <h1>Loading user playlists...</h1>
-        </div>
+        
       </div>
     )
   }
