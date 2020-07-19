@@ -67,7 +67,7 @@ class ToggleForm extends React.Component {
         //NEW
         this.state.clusters.push(playlist);
         this.state.clusterIDs.push(playlist.clusterNumber);
-        let clusterDescription = "Contains the following genres: "+ playlist.mostFrequentGenres.join()+" and the following artists: "+ playlist.mostFrequentArtists.join();
+        let clusterDescription = "This sub-collection contains the following genres: "+ playlist.mostFrequentGenres.join()+" and the following artists: "+ playlist.mostFrequentArtists.join();
         console.log(clusterDescription)
         this.state.clusterDescriptions.push(clusterDescription)
         this.state.clusterIndicators.push(false);
@@ -77,6 +77,8 @@ class ToggleForm extends React.Component {
       console.log("state after pushing data", this.state)
 
       let checkBoxComponentList = [];
+
+      checkBoxComponentList.push(<h3>Select one or more collections for inclusion in your custom playlist</h1>)
       
       for(let i=0; i<this.state.playlists.length; i++) {
         let clusterName = this.state.clusterDescriptions[i];
@@ -104,9 +106,13 @@ class ToggleForm extends React.Component {
         <div className="chart">
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
             <Spinner name='ball-triangle-path' fadeIn='none'/>
+            <div>
+              <br></br>
+              <br></br>
+              <h1>Creating a pool of custom recommendations</h1>
+              <br></br>
+              <br></br>
           </div>
-          <div>
-            <h1>Loading user playlists...</h1>
           </div>
         </div>
       )
