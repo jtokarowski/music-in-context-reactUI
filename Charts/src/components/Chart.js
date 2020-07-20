@@ -11,7 +11,8 @@ class Chart extends Component{
   static defaultProps = {
     displayTitle:true,
     displayLegend: true,
-    legendPosition:'right'
+    legendPosition:'right',
+    colors: ['rgba(245, 94, 29, 0.8)', 'rgba(0, 0, 0, 0.3)']
     //location:'City'
   }
 
@@ -67,19 +68,23 @@ class Chart extends Component{
         }
         incomingData.dataByAudioFeature.datasets.push(newAudioFeaturesObject)
       })
-      // create an object for each track
+      // create an object for each track  
       let colorIndexBT = 0;
       incomingData.rawDataByTrack.map((track) => {
+        let color = this.props.colors[1]
+        if (colorIndexBT === this.props.selectedTrack){
+          color = this.props.colors[0]
+        }
+        colorIndexBT += 1
         let newTrackObject = {
           label: track.trackName,
           data: incomingData.subTrackData[track.trackName],
-          fill: false,
-          borderColor: incomingData.colors[colorIndexBT]
+          fill: true,
+          borderColor: color
         }
-        colorIndexBT += 1
-        if (colorIndexBT === incomingData.colors.length){
-          colorIndexBT = 0
-        }
+        // if (colorIndexBT === 0){
+        //   colorIndexBT = 1
+        // }
         incomingData.dataByTrack.datasets.push(newTrackObject)
       })
       isLoading = false;
@@ -102,37 +107,11 @@ class Chart extends Component{
       )
 
     }
-    if (incomingData.mode === 'cluster'){
-      return (
-        <div className="chart">
-          <Radar
-            data={incomingData.dataByTrack}
-            options={{
-              title:{
-                display:this.props.displayTitle,
-                text:this.props.title,
-                fontSize:25
-              },
-              legend:{
-                display:this.props.displayLegend,
-                position:this.props.legendPosition
-              },
-              scale:{
-                ticks:{
-                  beginAtZero: true,
-                  max: 1
-                }
-              }
-            }}
-          />
-        </div>
-      )  
-    }
     return (
       <div className="chart">
         <div className="topRow">
           <div className="buttons">
-            <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Swap changed tracks with new recommendations" /></form>
+            <form onSubmit={(e)=>this.props.onRequestNewTracks(e)}><input type="submit" value="Swap adjusted tracks with new recommendations" /></form>
             <form onSubmit={(e)=>this.props.onCommitSet(e)}><input type="submit" value="Upload this playlist to Spotify" /></form>
           </div>
           <div className="radar">
@@ -160,9 +139,10 @@ class Chart extends Component{
                     max: 1
                   } 
                 },
-                onDragStart: function (e, element) {
+                onDragStart: (e, element) => {
                   // where e = event
-                  //console.log('dragging ', element)
+                  console.log('dragging ', element)
+                  this.props.onColorChange(element._datasetIndex);
                   },
                 onDrag: function (e, datasetIndex, index, value) {
                   // change cursor style to grabbing during drag action
@@ -215,8 +195,10 @@ class Chart extends Component{
                 display:this.props.displayLegend,
                 position:'right'
               },
-              onDragStart: function (e, element) {
+              onDragStart: (e, element) => {
                 // where e = event
+                console.log('dragging ', element)
+                this.props.onColorChange(element._index);
                 },
               onDrag: function (e, datasetIndex, index, value) {
                 // change cursor style to grabbing during drag action

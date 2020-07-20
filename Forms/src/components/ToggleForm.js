@@ -78,7 +78,7 @@ class ToggleForm extends React.Component {
 
       let checkBoxComponentList = [];
 
-      checkBoxComponentList.push(<h3>Select one or more collections for inclusion in your custom playlist</h1>)
+      checkBoxComponentList.push(<h3>Select one or more collections for inclusion in your custom playlist</h3>)
       
       for(let i=0; i<this.state.playlists.length; i++) {
         let clusterName = this.state.clusterDescriptions[i];
@@ -102,17 +102,13 @@ class ToggleForm extends React.Component {
       isLoading = true;
     }
     if (isLoading) {
-      return (
-        <div className="chart">
+      return(
+        <div className="loading">
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
             <Spinner name='ball-triangle-path' fadeIn='none'/>
-            <div>
-              <br></br>
-              <br></br>
-              <h1>Creating a pool of custom recommendations</h1>
-              <br></br>
-              <br></br>
           </div>
+          <div>
+            <h1>Building a pool of recommended tracks</h1>
           </div>
         </div>
       )

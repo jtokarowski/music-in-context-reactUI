@@ -19,6 +19,15 @@ class App extends Component {
     })
   }
 
+  handleColorChange = (index) =>{
+    console.log("index in parent app", index)
+    this.setState(prevState => { //https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
+      let selectedTrack = Object.assign({}, prevState.selectedTrack); 
+      selectedTrack = index;
+      return { selectedTrack };
+    })
+  }
+
   handleReset = (event) =>{
     event.preventDefault();
     console.log("Reset triggered")
@@ -114,7 +123,8 @@ class App extends Component {
     .then(data => {
       this.setState({
         rawIncomingData: data,
-        previousState: data
+        previousState: data,
+        selectedTrack: 0
       });
     })
    }
@@ -122,7 +132,18 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Chart rawIncomingData={this.state.rawIncomingData} title="Audio Features" legendPosition="bottom" onDrag={(datasetIndex, index, value) => this.handleDrag(datasetIndex, index, value)} onRequestNewTracks={(value) => this.handleRequestNewTracks(value)} onCommitSet={(value) => this.handleCommitSet(value)} onReset={(value) => this.handleReset(value)}/>
+        <Chart 
+        rawIncomingData={this.state.rawIncomingData} 
+        title="Audio Features" 
+        legendPosition="bottom" 
+        onDrag={(datasetIndex, index, value) => this.handleDrag(datasetIndex, index, value)} 
+        onRequestNewTracks={(value) => this.handleRequestNewTracks(value)} 
+        onCommitSet={(value) => this.handleCommitSet(value)} 
+        onReset={(value) => this.handleReset(value)} 
+        onColorChange={(element) => this.handleColorChange(element)} 
+        colors={['rgba(245, 94, 29, 0.8)', 'rgba(0, 0, 0, 0.3)']}
+        selectedTrack={this.state.selectedTrack}   
+        />
       </div>
     );
   }

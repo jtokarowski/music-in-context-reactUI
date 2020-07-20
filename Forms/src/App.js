@@ -44,26 +44,11 @@ class App extends Component {
   }
 
   render() {
-  if(this.state.mode === 'tunnel'){
     return(
     <div className="App">
       <ToggleForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.clusters}/>
     </div>
     )
-  }
-  else{
-    return(
-      <div className="loading">
-        <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
-          <Spinner name='ball-triangle-path' fadeIn='none'/>
-          <div>
-            <h1>Loading user playlists...</h1>
-          </div>
-        </div>
-        
-      </div>
-    )
-  }
   }
 }
 
