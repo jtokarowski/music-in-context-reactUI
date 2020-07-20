@@ -55,17 +55,36 @@ class Chart extends Component{
       }
       // create an object for each attribute
       let colorIndexAF = 0;
+      //let pointColorArray = ['rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)'] 
+      //TODO create an array of same color matching length of tracks
+      // then set the appropriate index to orange if it matches selectedTrackIndex
       incomingData.spotifyAudioFeatures.map((audioFeature) => {
+        let seriesColor = incomingData.colors[colorIndexAF]
+        let pointColorArray = []
+        let pointBackgroundColorArray = []
+        let pointRadiusArray = []
+        for (var i = 0; i < incomingData.trackNames.length; i++) {
+          if(i == this.props.selectedTrackIndex){
+            pointColorArray.push('rgba(245, 94, 29, 1)');
+            pointBackgroundColorArray.push('rgba(245, 94, 29, 1)')
+            pointRadiusArray.push(6)
+          }
+          else{
+            pointColorArray.push(seriesColor);
+            pointBackgroundColorArray.push('rgba(0, 0, 0, 0.1)')
+            pointRadiusArray.push(3)
+          }
+          
+        }
         let newAudioFeaturesObject = {
           label: audioFeature,
           data: incomingData.subAudioFeatureData[audioFeature],
           fill: false,
-          borderColor: incomingData.colors[colorIndexAF]
+          borderColor: pointColorArray,
+          backgroundColor: pointBackgroundColorArray,
+          radius: pointRadiusArray
         }
         colorIndexAF += 1
-        if (colorIndexAF === incomingData.colors.length){
-          colorIndexAF = 0
-        }
         incomingData.dataByAudioFeature.datasets.push(newAudioFeaturesObject)
       })
       // create an object for each track  

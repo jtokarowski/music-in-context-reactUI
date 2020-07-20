@@ -124,7 +124,7 @@ class App extends Component {
       this.setState({
         rawIncomingData: data,
         previousState: data,
-        selectedTrackIndex: 0
+        selectedTrackIndex: 1
       });
     })
    }
