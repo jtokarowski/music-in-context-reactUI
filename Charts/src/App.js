@@ -22,9 +22,9 @@ class App extends Component {
   handleColorChange = (index) =>{
     console.log("index in parent app", index)
     this.setState(prevState => { //https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
-      let selectedTrack = Object.assign({}, prevState.selectedTrack); 
-      selectedTrack = index;
-      return { selectedTrack };
+      let selectedTrackIndex = Object.assign({}, prevState.selectedTrackIndex); 
+      selectedTrackIndex = index;
+      return { selectedTrackIndex };
     })
   }
 
@@ -124,7 +124,7 @@ class App extends Component {
       this.setState({
         rawIncomingData: data,
         previousState: data,
-        selectedTrack: 0
+        selectedTrackIndex: 0
       });
     })
    }
@@ -141,8 +141,8 @@ class App extends Component {
         onCommitSet={(value) => this.handleCommitSet(value)} 
         onReset={(value) => this.handleReset(value)} 
         onColorChange={(element) => this.handleColorChange(element)} 
-        colors={['rgba(245, 94, 29, 0.8)', 'rgba(0, 0, 0, 0.3)']}
-        selectedTrack={this.state.selectedTrack}   
+        colors={['rgba(245, 94, 29, 1)', 'rgba(0, 0, 0, 0.1)']}
+        selectedTrackIndex={this.state.selectedTrackIndex}   
         />
       </div>
     );

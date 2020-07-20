@@ -12,7 +12,7 @@ class Chart extends Component{
     displayTitle:true,
     displayLegend: true,
     legendPosition:'right',
-    colors: ['rgba(245, 94, 29, 0.8)', 'rgba(0, 0, 0, 0.3)']
+    colors: ['rgba(245, 94, 29, 0.8)', 'rgba(0, 0, 0, 0.3)'],
     //location:'City'
   }
 
@@ -72,15 +72,18 @@ class Chart extends Component{
       let colorIndexBT = 0;
       incomingData.rawDataByTrack.map((track) => {
         let color = this.props.colors[1]
-        if (colorIndexBT === this.props.selectedTrack){
+        let shouldDrawBorder = false
+        if (colorIndexBT === this.props.selectedTrackIndex){
           color = this.props.colors[0]
+          shouldDrawBorder = true
         }
         colorIndexBT += 1
         let newTrackObject = {
           label: track.trackName,
           data: incomingData.subTrackData[track.trackName],
           fill: true,
-          borderColor: color
+          borderColor: color,
+          drawBorder: shouldDrawBorder
         }
         // if (colorIndexBT === 0){
         //   colorIndexBT = 1
