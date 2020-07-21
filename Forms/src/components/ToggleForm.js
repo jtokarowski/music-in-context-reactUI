@@ -56,7 +56,7 @@ class ToggleForm extends React.Component {
   render() {
 
     try {
-      this.props.data.map((playlist) => {
+      this.props.data.clusters.map((playlist) => {
       this.state[playlist.playlistname] = this.state[playlist.playlistname]
       if(firstrun){
         this.state.playlists.push(playlist);

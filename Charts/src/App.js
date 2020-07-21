@@ -108,7 +108,13 @@ class App extends Component {
        form_data: params.get('form_data')
      };
 
-    let posturl = 'https://music-in-context-backend.herokuapp.com/setfromcluster';
+    let posturl = '';
+    if(data.mode == 'tunnel'){
+      posturl = 'https://music-in-context-backend.herokuapp.com/setfromcluster';
+    }
+    else if(data.mode == 'playlist'){
+      posturl = 'https://music-in-context-backend.herokuapp.com/setfromplaylist';
+    }
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',

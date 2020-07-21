@@ -46,7 +46,7 @@ class RadioForm extends React.Component {
 
   render() {
     try{
-      this.props.data.map((playlist) => {
+      this.props.data.userPlaylists.map((playlist) => {
         this.state[playlist.playlistname] = this.state[playlist.playlistname]
         if(firstrun){
           this.state.playlists.push(playlist);
@@ -88,12 +88,12 @@ class RadioForm extends React.Component {
     }
     if (isLoading) {
       return (
-        <div className="chart">
+        <div className="loading">
           <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', height: '50vh'}}>
             <Spinner name='ball-triangle-path' fadeIn='none'/>
           </div>
           <div>
-            <h1>Loading user playlists...</h1>
+            <h1>Loading User Playlists</h1>
           </div>
         </div>
       )

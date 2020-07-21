@@ -55,9 +55,6 @@ class Chart extends Component{
       }
       // create an object for each attribute
       let colorIndexAF = 0;
-      //let pointColorArray = ['rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)','rgba(196, 226, 252, 1)'] 
-      //TODO create an array of same color matching length of tracks
-      // then set the appropriate index to orange if it matches selectedTrackIndex
       incomingData.spotifyAudioFeatures.map((audioFeature) => {
         let seriesColor = incomingData.colors[colorIndexAF]
         let pointColorArray = []
@@ -218,7 +215,6 @@ class Chart extends Component{
               },
               onDragStart: (e, element) => {
                 // where e = event
-                console.log('dragging ', element)
                 this.props.onColorChange(element._index);
                 },
               onDrag: function (e, datasetIndex, index, value) {

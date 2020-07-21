@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import ToggleForm from './components/ToggleForm';
+import RadioForm from './components/RadioForm';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "shards-ui/dist/css/shards.min.css"
-
-var Spinner = require('react-spinkit');
-
 
 class App extends Component {
   constructor(){
     super();
     this.state = {
+      mode: 'tunnel'
     }
   }
  
@@ -21,8 +20,14 @@ class App extends Component {
        refresh_token: params.get('refresh_token'),
        mode: params.get('mode')
      };
+     let posturl = ''
+     if(data.mode == 'tunnel'){
+      posturl = 'https://music-in-context-backend.herokuapp.com/clustertracks';
+    }
+    else if(data.mode == 'playlist'){
+      posturl = 'https://music-in-context-backend.herokuapp.com/getuserplaylists';
+    }
     
-    let posturl = 'https://music-in-context-backend.herokuapp.com/clustertracks';
     //send a post to the backend API to run the calcs and respond with data
     fetch(posturl,{
         mode: 'cors',
@@ -36,7 +41,7 @@ class App extends Component {
     .then(data => {
       console.log('data from post', data)
       this.setState({
-        clusters: data.clusters,
+        data: data,
         refreshToken: data.refreshToken,
         mode: data.mode
       });
@@ -44,11 +49,20 @@ class App extends Component {
   }
 
   render() {
-    return(
-    <div className="App">
-      <ToggleForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.clusters}/>
-    </div>
-    )
+    if(this.state.mode == 'tunnel'){
+      return(
+        <div className="App">
+          <ToggleForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.data}/>
+        </div>
+        )
+    }
+    else if(this.state.mode == 'playlist'){
+      return(
+        <div className="App">
+          <RadioForm  mode={this.state.mode} refreshToken={this.state.refreshToken} data={this.state.data}/>
+        </div>
+        )
+    }
   }
 }
 
