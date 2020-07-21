@@ -163,7 +163,6 @@ class Chart extends Component{
                 },
                 onDragStart: (e, element) => {
                   // where e = event
-                  console.log('dragging ', element)
                   this.props.onColorChange(element._datasetIndex);
                   },
                 onDrag: function (e, datasetIndex, index, value) {

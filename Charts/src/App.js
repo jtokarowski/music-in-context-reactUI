@@ -20,7 +20,6 @@ class App extends Component {
   }
 
   handleColorChange = (index) =>{
-    console.log("index in parent app", index)
     this.setState(prevState => { //https://stackoverflow.com/questions/43638938/updating-an-object-with-setstate-in-react
       let selectedTrackIndex = Object.assign({}, prevState.selectedTrackIndex); 
       selectedTrackIndex = index;
