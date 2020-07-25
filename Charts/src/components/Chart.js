@@ -57,17 +57,14 @@ class Chart extends Component{
       let colorIndexAF = 0;
       incomingData.spotifyAudioFeatures.map((audioFeature) => {
         let seriesColor = incomingData.colors[colorIndexAF]
-        let pointColorArray = []
         let pointBackgroundColorArray = []
         let pointRadiusArray = []
         for (var i = 0; i < incomingData.trackNames.length; i++) {
           if(i == this.props.selectedTrackIndex){
-            pointColorArray.push('rgba(245, 94, 29, 1)');
             pointBackgroundColorArray.push('rgba(245, 94, 29, 1)')
             pointRadiusArray.push(6)
           }
           else{
-            pointColorArray.push(seriesColor);
             pointBackgroundColorArray.push('rgba(0, 0, 0, 0.1)')
             pointRadiusArray.push(3)
           }
@@ -77,7 +74,7 @@ class Chart extends Component{
           label: audioFeature,
           data: incomingData.subAudioFeatureData[audioFeature],
           fill: false,
-          borderColor: pointColorArray,
+          borderColor: seriesColor,
           backgroundColor: pointBackgroundColorArray,
           radius: pointRadiusArray
         }
